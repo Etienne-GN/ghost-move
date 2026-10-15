@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.ghost-move" path="/org/gnome/shell/extensions/ghost-move/">
+    <key name="opacity" type="i">
+      <range min="0" max="100"/>
+      <default>60</default>
+      <summary>Window opacity (percent) while moving</summary>
+    </key>
+    <key name="border-enabled" type="b">
+      <default>false</default>
+      <summary>Draw a solid border around the window while moving</summary>
+    </key>
+    <key name="border-color" type="s">
+      <default>'rgba(53,132,228,1)'</default>
+      <summary>Border color (CSS color)</summary>
+    </key>
+    <key name="border-width" type="i">
+      <range min="1" max="20"/>
+      <default>2</default>
+      <summary>Border width in pixels</summary>
+    </key>
+    <key name="border-rounded" type="b">
+      <default>false</default>
+      <summary>Round the corners of the border</summary>
+    </key>
+    <key name="border-radius" type="i">
+      <range min="1" max="40"/>
+      <default>12</default>
+      <summary>Border corner radius in pixels</summary>
+    </key>
+    <key name="on-resize" type="b">
+      <default>false</default>
+      <summary>Also apply while resizing</summary>
+    </key>
+  </schema>
+</schemalist>

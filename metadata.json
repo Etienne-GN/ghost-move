@@ -1,0 +1,12 @@
+{
+  "uuid": "ghost-move@etienne-gn.github.io",
+  "name": "Ghost Move",
+  "description": "Make windows transparent while you move them, with an optional solid border.",
+  "shell-version": [
+    "50",
+    "51"
+  ],
+  "version-name": "0.2.0",
+  "settings-schema": "org.gnome.shell.extensions.ghost-move",
+  "url": "https://github.com/Etienne-GN/ghost-move"
+}
