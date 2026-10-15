@@ -69,11 +69,12 @@ window actor in the window group. It follows the window's frame rect through
 journalctl --user -b | grep -i ghost
 ```
 
-## Why not "Transparent Window Moving"?
+## Credits
 
-[Transparent Window Moving](https://extensions.gnome.org/extension/1446/transparent-window-moving/)
-only supports GNOME Shell up to 50. In 51, `grab-op-begin` gained an extra argument.
-Ghost Move is a small rewrite for current GNOME that adds the border options.
+Ghost Move is inspired by
+[Transparent Window Moving](https://extensions.gnome.org/extension/1446/transparent-window-moving/),
+which only supports GNOME Shell up to 50. It is an independent reimplementation,
+written from scratch for current GNOME (no code is shared), and adds the border options.
 
 ## License
 
