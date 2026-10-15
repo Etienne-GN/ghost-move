@@ -1,17 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
+import Meta from 'gi://Meta';
 import St from 'gi://St';
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 
-// Meta.GrabOp bits (mutter 51): bit 0 = window op, 256 = keyboard,
-// 512 = keyboard resize-unknown, 1024 = unconstrained, 0xF000 = resize edges.
-const WINDOW_BASE = 1;
-const RESIZE_MASK = 0xF000 | 512;
 const FADE_MS = 100;
 
+const MOVE_OPS = [
+    Meta.GrabOp.MOVING,
+    Meta.GrabOp.MOVING_UNCONSTRAINED,
+    Meta.GrabOp.KEYBOARD_MOVING,
+];
+
 function opKind(op) {
-    if (!(op & WINDOW_BASE))
-        return null;
-    return op & RESIZE_MASK ? 'resize' : 'move';
+    if (MOVE_OPS.includes(op))
+        return 'move';
+    // Any other window grab (mouse or keyboard, any edge) is a resize.
+    return op & Meta.GrabOp.WINDOW_BASE ? 'resize' : null;
 }
 
 export default class GhostMoveExtension extends Extension {

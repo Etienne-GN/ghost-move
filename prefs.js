@@ -3,7 +3,7 @@ import Adw from 'gi://Adw';
 import Gdk from 'gi://Gdk';
 import Gio from 'gi://Gio';
 import Gtk from 'gi://Gtk';
-import {ExtensionPreferences} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {ExtensionPreferences, gettext as _} from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 export default class GhostMovePrefs extends ExtensionPreferences {
     fillPreferencesWindow(window) {
@@ -11,32 +11,32 @@ export default class GhostMovePrefs extends ExtensionPreferences {
         const page = new Adw.PreferencesPage();
         window.add(page);
 
-        const general = new Adw.PreferencesGroup({title: 'Transparency'});
+        const general = new Adw.PreferencesGroup({title: _('Transparency')});
         page.add(general);
 
         const opacity = new Adw.SpinRow({
-            title: 'Opacity while moving',
-            subtitle: 'Percent (0 = invisible, 100 = opaque)',
+            title: _('Opacity while moving'),
+            subtitle: _('Percent (0 = invisible, 100 = opaque)'),
             adjustment: new Gtk.Adjustment({lower: 0, upper: 100, step_increment: 5}),
         });
         settings.bind('opacity', opacity, 'value', Gio.SettingsBindFlags.DEFAULT);
         general.add(opacity);
 
-        const resize = new Adw.SwitchRow({title: 'Also while resizing'});
+        const resize = new Adw.SwitchRow({title: _('Also while resizing')});
         settings.bind('on-resize', resize, 'active', Gio.SettingsBindFlags.DEFAULT);
         general.add(resize);
 
-        const borderGroup = new Adw.PreferencesGroup({title: 'Border'});
+        const borderGroup = new Adw.PreferencesGroup({title: _('Border')});
         page.add(borderGroup);
 
         const enabled = new Adw.SwitchRow({
-            title: 'Solid border',
-            subtitle: 'Keep an opaque outline around the moving window',
+            title: _('Solid border'),
+            subtitle: _('Keep an opaque outline around the moving window'),
         });
         settings.bind('border-enabled', enabled, 'active', Gio.SettingsBindFlags.DEFAULT);
         borderGroup.add(enabled);
 
-        const colorRow = new Adw.ActionRow({title: 'Border color'});
+        const colorRow = new Adw.ActionRow({title: _('Border color')});
         const colorButton = new Gtk.ColorDialogButton({
             dialog: new Gtk.ColorDialog({with_alpha: true}),
             valign: Gtk.Align.CENTER,
@@ -51,20 +51,20 @@ export default class GhostMovePrefs extends ExtensionPreferences {
         borderGroup.add(colorRow);
 
         const width = new Adw.SpinRow({
-            title: 'Border width',
-            subtitle: 'Pixels',
+            title: _('Border width'),
+            subtitle: _('Pixels'),
             adjustment: new Gtk.Adjustment({lower: 1, upper: 20, step_increment: 1}),
         });
         settings.bind('border-width', width, 'value', Gio.SettingsBindFlags.DEFAULT);
         borderGroup.add(width);
 
-        const rounded = new Adw.SwitchRow({title: 'Rounded corners'});
+        const rounded = new Adw.SwitchRow({title: _('Rounded corners')});
         settings.bind('border-rounded', rounded, 'active', Gio.SettingsBindFlags.DEFAULT);
         borderGroup.add(rounded);
 
         const radius = new Adw.SpinRow({
-            title: 'Corner radius',
-            subtitle: 'Pixels',
+            title: _('Corner radius'),
+            subtitle: _('Pixels'),
             adjustment: new Gtk.Adjustment({lower: 1, upper: 40, step_increment: 1}),
         });
         settings.bind('border-radius', radius, 'value', Gio.SettingsBindFlags.DEFAULT);
@@ -76,8 +76,14 @@ export default class GhostMovePrefs extends ExtensionPreferences {
             radius.sensitive = settings.get_boolean('border-enabled') &&
                 settings.get_boolean('border-rounded');
         };
-        settings.connect('changed::border-enabled', syncRadius);
-        settings.connect('changed::border-rounded', syncRadius);
+        const syncIds = [
+            settings.connect('changed::border-enabled', syncRadius),
+            settings.connect('changed::border-rounded', syncRadius),
+        ];
         syncRadius();
+        window.connect('close-request', () => {
+            for (const id of syncIds)
+                settings.disconnect(id);
+        });
     }
 }
